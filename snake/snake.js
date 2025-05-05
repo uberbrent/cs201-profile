@@ -21,7 +21,7 @@ let snakeBody, food, gameLoop;
 let gameRunning = false; 
 
 // Initialize the scoreboard
-scoreBoardUpdate(scoreBoard);
+scoreBoardInitialize(scoreBoard);
 
 // Initialize the game
 initGame();
@@ -172,8 +172,19 @@ function endGame(){
     gameOverMessage.style.display = 'block';
 }
 
-function scoreBoardUpdate(data) {
+function scoreBoardInitialize(data) {
+    scoreBoard.sort(function(a, b){return b - a});
+    viewableScore.innerHTML = "";
     for(i = 0; i < data.length; i++) {
-            viewableScore.innerHTML = "<tr><td>" + i + "</td><td>" + data[i] + "</td></tr>"
+        let tr = document.createElement("tr");
+        let th = document.createElement("th");
+        let td = document.createElement("td");
+        viewableScore.appendChild(tr);
+        th.innerText(i + 1);
+        tr.appendChild(th);
+        td.innerText(data[i]);
+        tr.appendChild(td);
     }
 }
+
+
