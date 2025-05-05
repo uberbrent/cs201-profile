@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Guess the Number</title>
+        <style>
+            body{
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 20px;
+            }
+
+            #gameContainer {
+                max-width: 400px;
+            }
+
+            #feedback {
+                margin-top: 20px;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="gameContainer">
+            <h1>Guess the Number</h1>
+            <p>I am thinking of a number between 1 and 100. Can you guess what it is?</p>
+
+            <input type="number" id="userInput" placeholder="Enter your guess here..." />
+            <button id="guessBtn">Guess</button>
+
+            <div id="feedback"></div>
+        </div>
+
+        <script>
+            const gameConfig = {
+                minNumber: 1,
+                maxNumber: 100, 
+                currentAnswer: null, 
+                guesses: []
+            };
+
+            startNewGame();
+            document.getElementById("guessBtn").addEventListener("click", handleGuess);
+
+            function startNewGame(){
+                gameConfig.currentAnswer = Math.floor(
+                Math.random()*(gameConfig.maxNumber - gameConfig.minNumber + 1)) + gameConfig.minNumber;
+
+                gameConfig.guesses = []; // reset the guesses
+                document.getElementById("userInput").value=""; 
+                updateFeedback("A new number is set. Try your first guess");
+            }
+
+            function updateFeedback(message){
+                document.getElementById("feedback").textContent = message;
+            }
+
+            function handleGuess(){
+                const guessValue = parseInt(document.getElementById("userInput").value, 10);
+
+                if(isNaN(guessValue)){
+                    updateFeedback("Please enter a valid number.");
+                }
+
+                // store the guess in the array
+                gameConfig.guesses.push(guessValue);
+
+                if(guessValue === gameConfig.currentAnswer){
+                    updateFeedback(
+                        "Correct! You got it in " + gameConfig.guesses.length + " tries" + "The number was " + gameConfig.currentAnswer
+                    );
+                    setTimeout(startNewGame, 3000);
+                } else if(guessValue < gameConfig.currentAnswer) {
+                    updateFeedback(
+                        "Too low! Keep trying. Guesses so far:" + gameConfig.guesses.join(", ")
+                    );
+                } else{
+                    updateFeedback(
+                        "Too high! Keep trying. Guesses so far: " + gameConfig.guesses.join(", ")
+                    );
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,3 +1,28 @@
+a {
+    text-decoration: none !important;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.landing-text {
+    color: white; /* Or your desired color */
+    text-shadow:
+        0 0 7px white,  /* First shadow - white, small blur */
+        0 0 10px white, /* Second shadow - white, medium blur */
+        0 0 21px white, /* Third shadow - white, larger blur */
+        0 0 42px #0fa, /* Fourth shadow - neon color, even larger blur */
+        0 0 82px #0fa, /* Fifth shadow - neon color, very large blur */
+        0 0 92px #0fa,
+        0 0 102px #0fa,
+        0 0 151px #0fa; /* Sixth shadow - neon color, largest blur */
+}
+
+.landing-bg {
+    background-image: url("assets/space.jpg")
+}
+
 .navbar {
     background-color: #3699b0 !important;
 }

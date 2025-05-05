@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Rock-Paper-Scissors</title>
+
+        <style>
+            body{
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 30px;
+            }
+            h1 {
+                margin-bottom: 10px;
+            }
+
+            .choices {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            button {
+                padding: 10px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            #result {
+                font-weight: bold;
+                margin-top:  20px;
+            }
+
+            #scoreboard {
+                margin-top:  20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Rock-Paper-Scissors</h1>
+        <p>Choose one of the options below:</p>
+
+        <div class="choices">
+            <button data-choice="Rock">Rock</button>
+            <button data-choice="Paper">Paper</button>
+            <button data-choice="Scissors">Scissors</button>
+        </div>
+
+        <div id="result">Make a move to start...</div>
+        <div id="scoreboard"></div>
+
+
+        <script>
+            const gameState = {
+                userScore: 0,
+                computerScore:0,
+                ties:0,
+                choices: ["Rock", "Paper", "Scissors"]
+            };
+
+            // Select the elements 
+            const buttons = document.querySelectorAll(".choices button")
+            const resultDiv = document.getElementById("result");
+            const scoreboardDiv = document.getElementById("scoreboard");
+
+            // Add click event listeners to each choice-button
+            buttons.forEach(button =>{
+                button.addEventListener("click", ()=> {
+                    const userChoice = button.getAttribute("data-choice");
+                    console.log("User chose:" + userChoice);
+                    playRound(userChoice);
+                });
+            });
+
+            /* Play one round of Rock-Paper-Scissors 
+            * with the given user choice. The computer choice
+            * is randomly chosen from the gameState.choices
+            */
+           function playRound(userChoice){
+            // generate computer choice
+            const computerChoice = getComputerChoice();
+            console.log(`Computer chose ${computerChoice}`);
+            // determine the winner
+            const roundResult = determineWinner(userChoice, computerChoice);
+
+            // Update the scoreboard counts based on the result
+            if(roundResult==="win"){
+                gameState.userScore++;
+                resultDiv.textContent = `You chose ${userChoice}, Computer chose ${computerChoice}. You win!`;
+            } else if(roundResult==="lose"){
+                gameState.computerScore++;
+                resultDiv.textContent = `You chose ${userChoice}, Computer chose ${computerChoice}. You lose!`;
+            } else {
+                gameState.ties++;
+                resultDiv.textContent = `You chose ${userChoice}, Computer chose ${computerChoice}. It's a tie!`;
+            }
+
+            updateScoreboard();
+           }
+
+           /* Returns a random choice from the 
+           *  array of possible choices
+           */
+          function getComputerChoice(){
+            const randomIndex = Math.floor(Math.random()*gameState.choices.length);
+            return gameState.choices[randomIndex];
+          }
+
+          /*
+          * Determine the outcome of a round given user and computer choices 
+          * Returns "win", "lose" or "tie"
+          */
+         function determineWinner(userChoice, computerChoice){
+            // if the choices are the same, it's a tie!
+            if(userChoice === computerChoice){
+                return "tie";
+            }
+
+            // Winning scenarios:
+            // Rock beats Scissors, Scissors beat Paper, Paper beats Rock
+            if(
+                (userChoice === "Rock" && computerChoice === "Scissors") ||
+                (userChoice === "Scissors" && computerChoice === "Paper") || 
+                (userChoice === "Paper" && computerChoice === "Rock")
+            ) {
+                return "win";
+            } else {
+                return "lose";
+            }
+         }
+
+         /* Updates the scoreboard on the screen*/
+
+         function updateScoreboard(){
+            scoreboardDiv.innerHTML= `<p>User Score: ${gameState.userScore}</p>` +
+            `<p>Computer Score: ${gameState.computerScore}</p>` + 
+            `<p>Ties: ${gameState.ties}</p>`;
+
+         }
+
+        //  initialize the scoreboard on page load
+        updateScoreboard();
+        </script>
+    </body>
+</html>
