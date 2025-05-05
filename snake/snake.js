@@ -5,6 +5,8 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const scoreDisplay = document.getElementById("score");
 const gameOverMessage = document.getElementById("gameOver");
+const viewableScore = document.getElementById("scoreBoard");
+let scoreBoard = [localStorage.getItem("scoreBoard")];
 
 // settings
 const gridSize = 20; // size of each cell
@@ -17,6 +19,9 @@ let velocityY = 0;
 // For easy re-initialization
 let snakeBody, food, gameLoop;
 let gameRunning = false; 
+
+// Initialize the scoreboard
+scoreBoardUpdate(scoreBoard);
 
 // Initialize the game
 initGame();
@@ -69,6 +74,9 @@ function game(){
         if(snakeBody[i].x === headX && 
             snakeBody[i].y === headY){
                 // Game over
+                scoreBoard.push(snakeBody.length);
+                console.log("The Scoreboard: " + scoreBoard);
+                localStorage.setItem("scoreBoard", scoreBoard);
                 endGame();
                 return;
             }
@@ -158,7 +166,14 @@ function updateScore(){
 }
 
 function endGame(){
+    scoreBoardUpdate(scoreBoard);
     clearInterval(gameLoop);
     gameRunning = false; 
     gameOverMessage.style.display = 'block';
+}
+
+function scoreBoardUpdate(data) {
+    for(i = 0; i < data.length; i++) {
+            viewableScore.innerHTML = "<tr><td>" + i + "</td><td>" + data[i] + "</td></tr>"
+    }
 }
