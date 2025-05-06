@@ -6,7 +6,8 @@ const ctx = canvas.getContext("2d");
 const scoreDisplay = document.getElementById("score");
 const gameOverMessage = document.getElementById("gameOver");
 const viewableScore = document.getElementById("scoreBoard");
-let scoreBoard = [localStorage.getItem("scoreBoard")];
+let storedBoard = localStorage.getItem("scoreBoard");
+let scoreBoard = JSON.parse(storedBoard);
 
 // settings
 const gridSize = 20; // size of each cell
@@ -20,8 +21,11 @@ let velocityY = 0;
 let snakeBody, food, gameLoop;
 let gameRunning = false; 
 
-// Initialize the scoreboard
-scoreBoardInitialize(scoreBoard);
+console.log(scoreBoard);
+
+if (scoreBoard != null) {
+    scoreBoardInitialize(scoreBoard);
+}
 
 // Initialize the game
 initGame();
@@ -75,8 +79,8 @@ function game(){
             snakeBody[i].y === headY){
                 // Game over
                 scoreBoard.push(snakeBody.length);
-                console.log("The Scoreboard: " + scoreBoard);
-                localStorage.setItem("scoreBoard", scoreBoard);
+                let string = JSON.stringify(scoreBoard);
+                localStorage.setItem("scoreBoard", string);
                 endGame();
                 return;
             }
@@ -166,7 +170,7 @@ function updateScore(){
 }
 
 function endGame(){
-    scoreBoardUpdate(scoreBoard);
+    scoreBoardInitialize(scoreBoard);
     clearInterval(gameLoop);
     gameRunning = false; 
     gameOverMessage.style.display = 'block';
@@ -180,9 +184,9 @@ function scoreBoardInitialize(data) {
         let th = document.createElement("th");
         let td = document.createElement("td");
         viewableScore.appendChild(tr);
-        th.innerText(i + 1);
+        th.textContent = i + 1;
         tr.appendChild(th);
-        td.innerText(data[i]);
+        td.textContent = data[i];
         tr.appendChild(td);
     }
 }
